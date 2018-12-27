@@ -46,7 +46,7 @@ pub struct PCD8544<'a> {
     power_down_control: bool,
     entry_mode: bool,
     extended_instruction_set: bool,
-    data: [[u8; 83]; 6],
+    data: [[u8; WIDTH as usize]; ROWS as usize],
 }
 
 impl<'a> PCD8544<'a> {
@@ -61,7 +61,7 @@ impl<'a> PCD8544<'a> {
         clk.set_low();
         rst.set_low();
         ce.set_high();
-        let data = [[0; 83]; 6];
+        let data = [[0; WIDTH as usize]; ROWS as usize];
         PCD8544 {
             clk,
             din,
