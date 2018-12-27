@@ -4,6 +4,10 @@ extern crate embedded_hal as hal;
 
 use hal::digital::OutputPin;
 
+const WIDTH: u8 = 84;
+const HEIGHT: u8 = 48;
+const ROWS: u8 = HEIGHT / 8;
+
 #[repr(u8)]
 pub enum TemperatureCoefficient {
     TC0 = 0,
@@ -237,9 +241,14 @@ impl Drawing<PixelColorU8> for PCD8544<'_> {
         T: Iterator<Item = drawable::Pixel<PixelColorU8>>,
     {
         for pixel in item_pixels {
+            let x = (pixel.0).0 as u8;
+            let y = (pixel.0).1 as u8;
+            if x >= WIDTH || y >= HEIGHT {
+                continue;
+            }
             self.set_pixel(
-                (pixel.0).0 as u8,
-                (pixel.0).1 as u8,
+                x,
+                y,
                 if pixel.1.into_inner() > 128 {
                     true
                 } else {
